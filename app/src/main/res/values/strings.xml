@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sensoridata</string>
+    <string name="edit_id">Enter ID</string>
+    <string name="GPS">GPS</string>
+    <string name="voice">Voice</string>
+    <string name="button_send">Käynnistä</string>
+</resources>
