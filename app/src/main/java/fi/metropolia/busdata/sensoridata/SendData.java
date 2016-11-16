@@ -41,34 +41,38 @@ public class SendData extends AppCompatActivity {
         setContentView(R.layout.activity_send_data);
     }
 
-    // Kokeillaan aluksi saada Andoid app lähettämään dataa palvelimelle JSON-objektina
+    // Kokeillaan aluksi saada Andoid app lähettämään jotain dataa palvelimelle JSON-objektina
 
     /*
     * Method joka käynnistyy kun Käynnistä-nappia painetaan.
     * Suorittaa AsyncT classin 1s välein.
     */
     public void sendData(View view) {
-        while (0 == 0) {
+        //while (0 == 0) {
             AsyncT asyncT = new AsyncT();
             asyncT.execute();
-            Thread.sleep(100);
+         //   Thread.sleep(100);
+        // looppi ei toimi vielä
         }
     }
 
     // https://trinitytuts.com/post-json-data-to-server-in-android/
+    // http://stackoverflow.com/questions/31552242/sending-http-post-request-with-android
     /* Inner class to get response */
     class AsyncT extends AsyncTask<Void, Void, Void> {
+
         @Override
         protected Void doInBackground(Void... voids) {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost("http://busdata.metropolia.fi/"); // YOUR_SERVICE_URL
 
             try {
-                // luodaan JSON-objekti
+                // luodaan JSON-objekti, eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
 
                 jsonobj.put("id", "1");
                 jsonobj.put("nopeus", "10");
+                System.out.print("Jotain ainakin tapahtuu!");
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
                 nameValuePairs.add(new BasicNameValuePair("req", jsonobj.toString()));
@@ -80,17 +84,17 @@ public class SendData extends AppCompatActivity {
 
                 // Execute HTTP Post Request
                 HttpResponse response = httpclient.execute(httppost);
-                InputStream inputStream = response.getEntity().getContent();
+                /* InputStream inputStream = response.getEntity().getContent();
                 InputStreamToStringExample str = new InputStreamToStringExample();
                 responseServer = str.getStringFromInputStream(inputStream);
-                Log.e("response", "response -----" + responseServer);
+                Log.e("response", "response -----" + responseServer); */
 
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-                return null;
-            }
+            return null;
 
-        }
+
     }
+}
