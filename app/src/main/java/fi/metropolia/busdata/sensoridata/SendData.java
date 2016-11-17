@@ -58,12 +58,15 @@ public class SendData extends AppCompatActivity {
             HttpPost post = new HttpPost("http://busdata.metropolia.fi:80/bussidata"); // YOUR_SERVICE_URL
             post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
+            String latLonStr = DataContainer.getGPS().toString();
+
             try {
                 // luodaan JSON-objekti, eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
 
                 jsonobj.put("ID", valueID);
                 jsonobj.put("nopeus", "10");
+                jsonobj.put("GPS", latLonStr);
 
                 StringEntity se = new StringEntity(jsonobj.toString());
                 Log.e("mainToPost", "mainToPost" + jsonobj.toString());
