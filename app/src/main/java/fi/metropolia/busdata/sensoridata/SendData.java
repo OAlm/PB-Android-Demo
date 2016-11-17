@@ -20,6 +20,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -31,9 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SendData extends AppCompatActivity {
-
-    // Response
-    String responseServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,37 +62,26 @@ public class SendData extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://busdata.metropolia.fi/"); // YOUR_SERVICE_URL
+            HttpPost post = new HttpPost("http://busdata.metropolia.fi:80/bussidata"); // YOUR_SERVICE_URL
+            post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
             try {
                 // luodaan JSON-objekti, eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
 
-                jsonobj.put("id", "1");
+                jsonobj.put("ID", "1");
                 jsonobj.put("nopeus", "10");
-                System.out.print("Jotain ainakin tapahtuu!");
 
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-                nameValuePairs.add(new BasicNameValuePair("req", jsonobj.toString()));
-
-                Log.e("mainToPost", "mainToPost" + nameValuePairs.toString());
-
-                // Use UrlEncodedFormEntity to send in proper format which we need
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                StringEntity se = new StringEntity(jsonobj.toString());
+                Log.e("mainToPost", "mainToPost" + jsonobj.toString());
+                post.setEntity(se);
 
                 // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
-                /* InputStream inputStream = response.getEntity().getContent();
-                InputStreamToStringExample str = new InputStreamToStringExample();
-                responseServer = str.getStringFromInputStream(inputStream);
-                Log.e("response", "response -----" + responseServer); */
-
+                HttpResponse response = httpclient.execute(post);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
-
-
     }
 }
