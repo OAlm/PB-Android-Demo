@@ -5,8 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.EditText;
 
 /*
 * org.apache.http pois käytöstä
@@ -14,24 +13,17 @@ import android.widget.CheckBox;
 * -> toimii, mutta deprecated varoituksia
 */
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SendData extends AppCompatActivity {
+
+    // alustetaan syötettävä ID
+    EditText mEdit;
+    public String valueID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +31,20 @@ public class SendData extends AppCompatActivity {
         setContentView(R.layout.activity_send_data);
     }
 
-    // Kokeillaan aluksi saada Andoid app lähettämään jotain dataa palvelimelle JSON-objektina
-
     /*
     * Method joka käynnistyy kun Käynnistä-nappia painetaan.
     * Suorittaa AsyncT classin 1s välein.
     */
     public void sendData(View view) {
-        //while (0 == 0) {
-            AsyncT asyncT = new AsyncT();
-            asyncT.execute();
-         //   Thread.sleep(100);
-        // looppi ei toimi vielä
-        }
+        // Tämä looppiin:
+
+        // haetaan id arvo käyttöliittymästä
+        mEdit = (EditText) findViewById(R.id.edit_id);
+        valueID = mEdit.getText().toString();
+
+        // suoritetaan AsyncT
+        AsyncT asyncT = new AsyncT();
+        asyncT.execute();
     }
 
     // https://trinitytuts.com/post-json-data-to-server-in-android/
@@ -69,7 +62,7 @@ public class SendData extends AppCompatActivity {
                 // luodaan JSON-objekti, eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
 
-                jsonobj.put("ID", "1");
+                jsonobj.put("ID", valueID);
                 jsonobj.put("nopeus", "10");
 
                 StringEntity se = new StringEntity(jsonobj.toString());
@@ -83,5 +76,6 @@ public class SendData extends AppCompatActivity {
                 e.printStackTrace();
             }
             return null;
+        }
     }
 }
