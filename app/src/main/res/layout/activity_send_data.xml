@@ -21,7 +21,7 @@
         android:hint="@string/edit_id"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true" />
-
+    <!--
     <CheckBox android:id="@+id/checkbox_GPS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,12 +35,12 @@
         android:text="@string/voice"
         android:layout_below="@+id/checkbox_GPS"
         android:onClick="onCheckboxClicked"/>
-
+    -->
     <Button android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/checkbox_voice"
+        android:layout_below="@+id/edit_id"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"

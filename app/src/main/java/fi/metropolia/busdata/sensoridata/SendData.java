@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.text.format.Time;
 
-/*
+/**
 * org.apache.http pois käytöstä
 * build.gradleen lisätty: useLibrary "org.apache.http.legacy"
 * -> toimii, mutta deprecated varoituksia
@@ -25,6 +26,7 @@ public class SendData extends AppCompatActivity {
     EditText mEdit;
     public String valueID;
 
+    // alustetaan sending while-looppia varten
     public boolean sending = true;
 
     @Override
@@ -33,7 +35,7 @@ public class SendData extends AppCompatActivity {
         setContentView(R.layout.activity_send_data);
     }
 
-    // Thread joka käynnistyy kun Käynnistä-nappia painetaan.
+    // Thread suoritetaan Käynnistä-nappia painettaessa
     public class MyThread extends Thread {
         public void run(){
             while(sending == true) {
@@ -51,6 +53,14 @@ public class SendData extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    // luodaan timestamp
+    public static String getTimeStamp() {
+        Time now = new Time();
+        now.setToNow();
+        String timeStamp = now.format("%d.%m.%Y %H:%M:%S");
+        return timeStamp;
     }
 
     // sammutetaan lähetys
@@ -86,6 +96,7 @@ public class SendData extends AppCompatActivity {
                 jsonobj.put("ID", valueID);
                 jsonobj.put("nopeus", "15");
                 jsonobj.put("GPS", latLonStr);
+                jsonobj.put("TimeStamp", getTimeStamp());
 
                 StringEntity se = new StringEntity(jsonobj.toString());
                 Log.e("mainToPost", "mainToPost" + jsonobj.toString());
