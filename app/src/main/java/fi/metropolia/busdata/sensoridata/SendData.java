@@ -25,26 +25,45 @@ public class SendData extends AppCompatActivity {
     EditText mEdit;
     public String valueID;
 
+    public boolean sending = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
     }
 
-    /*
-    * Method joka käynnistyy kun Käynnistä-nappia painetaan.
-    * Suorittaa AsyncT classin 1s välein.
-    */
+    // Thread joka käynnistyy kun Käynnistä-nappia painetaan.
+    public class MyThread extends Thread {
+        public void run(){
+            while(sending == true) {
+                // haetaan id arvo käyttöliittymästä
+                mEdit = (EditText) findViewById(R.id.edit_id);
+                valueID = mEdit.getText().toString();
+                try {
+                    // suoritetaan AsyncT
+                    AsyncT asyncT = new AsyncT();
+                    asyncT.execute();
+                    // odotetaan sekunti
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // sammutetaan lähetys
+    public void close(View view) {
+        sending = false;
+        return;
+    }
+
+    // käynnistetään lähetys
     public void sendData(View view) {
-        // Tämä looppiin:
-
-        // haetaan id arvo käyttöliittymästä
-        mEdit = (EditText) findViewById(R.id.edit_id);
-        valueID = mEdit.getText().toString();
-
-        // suoritetaan AsyncT
-        AsyncT asyncT = new AsyncT();
-        asyncT.execute();
+        sending = true;
+        MyThread loop = new MyThread();
+        loop.start();
     }
 
     // https://trinitytuts.com/post-json-data-to-server-in-android/
@@ -65,7 +84,7 @@ public class SendData extends AppCompatActivity {
                 JSONObject jsonobj = new JSONObject();
 
                 jsonobj.put("ID", valueID);
-                jsonobj.put("nopeus", "10");
+                jsonobj.put("nopeus", "15");
                 jsonobj.put("GPS", latLonStr);
 
                 StringEntity se = new StringEntity(jsonobj.toString());
