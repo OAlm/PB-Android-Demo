@@ -1,9 +1,7 @@
 package fi.metropolia.busdata.sensoridata;
 
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.location.LocationManager;
+import android.icu.util.GregorianCalendar;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
-public class SendData extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     // alustetaan syötettävä ID
     EditText appIdEdit;
@@ -34,7 +32,7 @@ public class SendData extends AppCompatActivity {
     public String valueDevID;
     EditText msgEdit;
     public String valueMSG;
-    private getGPS gps;
+    private GPSTracker gps;
 
     // alustetaan sending while-looppia varten
     public boolean sending = true;
@@ -42,17 +40,15 @@ public class SendData extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.gps = new getGPS();
-        //Intent intent = new Intent(this, getGPS.class);
-        //startActivity(intent);
         setContentView(R.layout.activity_send_data);
-        Log.e("onCreate OK", "ok");
+
+        Log.e("Main / onCreate", "ok");
     }
 
     // Thread suoritetaan Käynnistä-nappia painettaessa
     public class MyThread extends Thread {
         public void run(){
-            while(sending == true) {
+            while(sending) {
                 Log.e("Run OK", "ok");
                 // haetaan App_Id arvo käyttöliittymästä
                 appIdEdit = (EditText) findViewById(R.id.edit_appid);
@@ -80,19 +76,24 @@ public class SendData extends AppCompatActivity {
     public static String getTimeStamp() {
         Time now = new Time();
         now.setToNow();
-        String timeStamp = now.format("%d.%m.%Y %H:%M:%S");
-        return timeStamp;
+        return now.format("%d.%m.%Y %H:%M:%S");
     }
 
     // sammutetaan lähetys
     public void close(View view) {
         Toast.makeText(getBaseContext(), "Sammutettu", Toast.LENGTH_SHORT).show();
         sending = false;
-        return;
     }
 
     // käynnistetään lähetys
     public void sendData(View view) {
+        Log.e("Main / sendData", "start");
+
+        Log.e("***Init GPSTracker***", "in process");
+        Intent intent = new Intent(this, GPSTracker.class);
+        startActivity(intent);
+        Log.e("********************", "ok");
+
         Toast.makeText(getBaseContext(), "Lähetys päällä", Toast.LENGTH_SHORT).show();
         sending = true;
         MyThread loop = new MyThread();
