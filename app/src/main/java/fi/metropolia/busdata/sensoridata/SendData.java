@@ -1,5 +1,9 @@
 package fi.metropolia.busdata.sensoridata;
 
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.text.format.Time;
+import android.widget.Toast;
 
 /**
 * org.apache.http pois käytöstä
@@ -23,8 +28,13 @@ import org.json.JSONObject;
 public class SendData extends AppCompatActivity {
 
     // alustetaan syötettävä ID
-    EditText mEdit;
-    public String valueID;
+    EditText appIdEdit;
+    public String valueAppID;
+    EditText devIdEdit;
+    public String valueDevID;
+    EditText msgEdit;
+    public String valueMSG;
+    private getGPS gps;
 
     // alustetaan sending while-looppia varten
     public boolean sending = true;
@@ -32,16 +42,27 @@ public class SendData extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //this.gps = new getGPS();
+        //Intent intent = new Intent(this, getGPS.class);
+        //startActivity(intent);
         setContentView(R.layout.activity_send_data);
+        Log.e("onCreate OK", "ok");
     }
 
     // Thread suoritetaan Käynnistä-nappia painettaessa
     public class MyThread extends Thread {
         public void run(){
             while(sending == true) {
-                // haetaan id arvo käyttöliittymästä
-                mEdit = (EditText) findViewById(R.id.edit_id);
-                valueID = mEdit.getText().toString();
+                Log.e("Run OK", "ok");
+                // haetaan App_Id arvo käyttöliittymästä
+                appIdEdit = (EditText) findViewById(R.id.edit_appid);
+                valueAppID = appIdEdit.getText().toString();
+                // haetaan Dev_id arvo käyttöliittymästä
+                devIdEdit = (EditText) findViewById(R.id.edit_devid);
+                valueDevID = appIdEdit.getText().toString();
+                // haetaan msg arvo käyttöliittymästä
+                msgEdit = (EditText) findViewById(R.id.edit_msg);
+                valueMSG = msgEdit.getText().toString();
                 try {
                     // suoritetaan AsyncT
                     AsyncT asyncT = new AsyncT();
@@ -65,12 +86,14 @@ public class SendData extends AppCompatActivity {
 
     // sammutetaan lähetys
     public void close(View view) {
+        Toast.makeText(getBaseContext(), "Sammutettu", Toast.LENGTH_SHORT).show();
         sending = false;
         return;
     }
 
     // käynnistetään lähetys
     public void sendData(View view) {
+        Toast.makeText(getBaseContext(), "Lähetys päällä", Toast.LENGTH_SHORT).show();
         sending = true;
         MyThread loop = new MyThread();
         loop.start();
@@ -93,7 +116,9 @@ public class SendData extends AppCompatActivity {
                 // luodaan JSON-objekti, eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
 
-                jsonobj.put("ID", valueID);
+                jsonobj.put("APP_ID", valueAppID);
+                jsonobj.put("DEV_ID", valueDevID);
+                jsonobj.put("viesti", valueMSG);
                 jsonobj.put("nopeus", "15");
                 jsonobj.put("GPS", latLonStr);
                 jsonobj.put("TimeStamp", getTimeStamp());

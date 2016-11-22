@@ -15,11 +15,25 @@
         android:layout_height="wrap_content"
         android:text="Valitse lähetettävä data:" />
 
-    <EditText android:id="@+id/edit_id"
+    <EditText android:id="@+id/edit_appid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/edit_id"
+        android:hint="Valitse kanava"
         android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <EditText android:id="@+id/edit_devid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter DEV_ID"
+        android:layout_below="@+id/edit_appid"
+        android:layout_alignParentStart="true" />
+
+    <EditText android:id="@+id/edit_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Enter message"
+        android:layout_below="@+id/edit_devid"
         android:layout_alignParentStart="true" />
     <!--
     <CheckBox android:id="@+id/checkbox_GPS"
@@ -40,13 +54,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/edit_id"
+        android:layout_below="@+id/edit_msg"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sammuta"
-        android:layout_below="@+id/button"
-        android:onClick="close" />
+        android:onClick="close"
+        android:layout_below="@+id/edit_msg"
+        android:layout_toEndOf="@+id/edit_msg" />
 </RelativeLayout>

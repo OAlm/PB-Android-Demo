@@ -45,8 +45,7 @@ public class getGPS extends Activity implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Log.e("GPS ok", "");
-        System.exit(0);
+        Log.e("GPS ok", "ok");
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
     }
 
@@ -54,7 +53,7 @@ public class getGPS extends Activity implements LocationListener {
     public void onLocationChanged(Location location) {
         valueGPS = "Lat: " + location.getLatitude() + "Long: " + location.getLongitude();
         Log.e("setGPS", valueGPS);
-        Toast.makeText(getBaseContext(), valueGPS, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getBaseContext(), valueGPS, Toast.LENGTH_LONG).show();
         DataContainer.setGPS(location.getLatitude(), location.getLongitude());
     }
 
