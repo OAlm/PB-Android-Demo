@@ -21,7 +21,7 @@ import android.util.Log;
 // http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
 // http://techlovejump.com/android-gps-location-manager-tutorial/
 
-public class getGPS extends Activity implements LocationListener {
+public class GPSTracker extends Activity implements LocationListener {
 
     public String valueGPS;
     private LocationManager locationManager;
@@ -29,23 +29,21 @@ public class getGPS extends Activity implements LocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("GPSTracker / onCreate", "pending");
         setContentView(R.layout.activity_send_data);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
         // Android studio halusi laittaa permissio chekin
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            Log.e("Fine location fail"+(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED), "");
-            Log.e("Fine location fail"+(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED), "");
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            Log.e("GPSTracker", "permission failed for accessing the location!");
             return;
         }
         Log.e("GPS ok", "ok");
+        // dummy values to test that the init was ok
+        DataContainer.setGPS(-10.0, -10.0);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
     }
 
@@ -72,5 +70,22 @@ public class getGPS extends Activity implements LocationListener {
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("GPS permission","Permission granted!");
+                    Toast.makeText(getBaseContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("GPS permission","Permission not granted!");
+                    Toast.makeText(getBaseContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 }

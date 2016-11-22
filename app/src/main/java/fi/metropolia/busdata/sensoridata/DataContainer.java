@@ -20,7 +20,7 @@ public class DataContainer {
     }
 
     public static List<Double> getGPS(){
-        Log.e("getGPS", "Values: "+gpsCoordinates);
+        Log.e("GPSTracker", "Values: "+gpsCoordinates);
         return gpsCoordinates;
     }
 
