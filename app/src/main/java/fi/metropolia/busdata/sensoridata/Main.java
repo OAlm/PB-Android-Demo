@@ -2,11 +2,16 @@ package fi.metropolia.busdata.sensoridata;
 
 import android.content.Intent;
 import android.icu.util.GregorianCalendar;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.location.LocationManager;
+import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.text.format.Time;
 import android.widget.Toast;
@@ -25,16 +30,17 @@ import org.json.JSONObject;
 
 public class Main extends AppCompatActivity {
 
-    // alustetaan syötettävä ID
+    // alustetaan syötettävä data
     EditText appIdEdit;
     public String valueAppID;
     EditText devIdEdit;
     public String valueDevID;
     EditText msgEdit;
     public String valueMSG;
-    private GPSTracker gps;
 
-    // alustetaan sending while-looppia varten
+    // alustetaan muut muuttujat
+    private GPSTracker gps;
+    public boolean onoffGPS;
     public boolean sending = true;
 
     @Override
@@ -53,9 +59,9 @@ public class Main extends AppCompatActivity {
                 // haetaan App_Id arvo käyttöliittymästä
                 appIdEdit = (EditText) findViewById(R.id.edit_appid);
                 valueAppID = appIdEdit.getText().toString();
-                // haetaan Dev_id arvo käyttöliittymästä
+                // haetaan Dev_Id arvo käyttöliittymästä
                 devIdEdit = (EditText) findViewById(R.id.edit_devid);
-                valueDevID = appIdEdit.getText().toString();
+                valueDevID = devIdEdit.getText().toString();
                 // haetaan msg arvo käyttöliittymästä
                 msgEdit = (EditText) findViewById(R.id.edit_msg);
                 valueMSG = msgEdit.getText().toString();
@@ -72,12 +78,25 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    // luodaan timestamp
+    // Katsotaan checkboxit
+    public void onCheckboxClicked(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.checkbox_GPS:
+                if (checked) {
+                    onoffGPS = true;
+                } else {
+                    onoffGPS = false;
+                }
+                break;
+        }
+    }
+
+    // luodaan timeStamp
     public static String getTimeStamp() {
         Time now = new Time();
         now.setToNow();
-        return now.format("%d.%m.%Y %H:%M:%S");
-    }
+        return now.format("%d.%m.%Y %H:%M:%S");}
 
     // sammutetaan lähetys
     public void close(View view) {
@@ -94,7 +113,7 @@ public class Main extends AppCompatActivity {
         startActivity(intent);
         Log.e("********************", "ok");
 
-        Toast.makeText(getBaseContext(), "Lähetys päällä", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Käynnissä", Toast.LENGTH_SHORT).show();
         sending = true;
         MyThread loop = new MyThread();
         loop.start();
@@ -112,6 +131,7 @@ public class Main extends AppCompatActivity {
             post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
             String latLonStr = DataContainer.getGPS().toString();
+            String accStr = DataContainer.getAcc().toString();
 
             try {
                 // luodaan JSON-objekti, eli mitä lähetetään
@@ -119,10 +139,15 @@ public class Main extends AppCompatActivity {
 
                 jsonobj.put("APP_ID", valueAppID);
                 jsonobj.put("DEV_ID", valueDevID);
+                if (onoffGPS) {
+                    jsonobj.put("GPS", latLonStr);
+                } else {
+                    Log.e("Main / GPS","off");
+                }
+                jsonobj.put("kiihtyvyys", accStr);
+                jsonobj.put("nopeus", "15"); //example value
                 jsonobj.put("viesti", valueMSG);
-                jsonobj.put("nopeus", "15");
-                jsonobj.put("GPS", latLonStr);
-                jsonobj.put("TimeStamp", getTimeStamp());
+                jsonobj.put("timeStamp", getTimeStamp());
 
                 StringEntity se = new StringEntity(jsonobj.toString());
                 Log.e("mainToPost", "mainToPost" + jsonobj.toString());

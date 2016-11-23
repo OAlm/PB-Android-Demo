@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class DataContainer {
 
-    // format <lat, lon>
+    // GPS: format <lat, lon>
     public static final Double[] UNDEFINEDCOORDINATES = {-1.0,-1.0};
     private static List<Double> gpsCoordinates = Arrays.asList(UNDEFINEDCOORDINATES);
     public static void setGPS(Double lat, Double lon) {
@@ -27,5 +27,20 @@ public class DataContainer {
     public static void main(String[]args){
         setGPS(0.1,0.1);
         System.out.println(getGPS());
+    }
+
+    // Acceleration
+    public static final float[] UNDEFINEDAXISES = {0,0};
+    private static List<float[]> accAxises = Arrays.asList(UNDEFINEDAXISES);
+    public static void setAcceleration(float accAxisX, float accAxisY) {
+        Log.e("setAcceleration", "Values: "+accAxisX+","+accAxisY);
+        float[] arr = {accAxisX, accAxisY};
+        accAxises = Arrays.asList(arr);
+    }
+
+    public static List<float[]> getAcc(){
+        Log.e("GMS / Acceleration", "Values: "+accAxises);
+        // -> E/GMS / Acceleration: Values: [[F@21c02a0] ???
+        return accAxises;
     }
 }

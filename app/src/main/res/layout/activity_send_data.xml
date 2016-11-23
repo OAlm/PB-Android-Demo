@@ -35,14 +35,14 @@
         android:hint="Enter message"
         android:layout_below="@+id/edit_devid"
         android:layout_alignParentStart="true" />
-    <!--
+
     <CheckBox android:id="@+id/checkbox_GPS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/GPS"
-        android:layout_below="@+id/edit_id"
+        android:layout_below="@+id/edit_msg"
         android:onClick="onCheckboxClicked"/>
-
+    <!--
     <CheckBox android:id="@+id/checkbox_voice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/edit_msg"
+        android:layout_below="@+id/checkbox_GPS"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"
@@ -62,6 +62,6 @@
         android:layout_height="wrap_content"
         android:text="Sammuta"
         android:onClick="close"
-        android:layout_below="@+id/edit_msg"
+        android:layout_below="@+id/checkbox_GPS"
         android:layout_toEndOf="@+id/edit_msg" />
 </RelativeLayout>
