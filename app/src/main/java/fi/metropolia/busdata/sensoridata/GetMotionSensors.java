@@ -16,7 +16,14 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
 
     public enum SensorType {STEPCOUNTER, GYRO, ACCELERATOR}
 
+    // GYRO variables
+    // Create a constant to convert nanoseconds to seconds.
+    private static final float NS2S = 1.0f / 1000000000.0f;
+    private final float[] deltaRotationVector = new float[4];
+    private float timestamp;
+
     public Sensor newSensor(SensorType sensor) {
+        Log.e("MotionSenrorit", "HALOO???");
 
         SensorManager mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         if(sensor == SensorType.GYRO) {
@@ -38,15 +45,16 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
 
    public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            // säädetään gyroscopea
-            // DataContainer.setGyro();
+            if (timestamp != 0) {
+                DataContainer.setGyro(event.values[0], event.values[1]);
+            }
         } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             DataContainer.setAcceleration(event.values[0], event.values[1]);
         } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            // säädetään stepconteria
-            // DataContainer.setStepCounter(event.values[0]);
+            DataContainer.setStepCount(event.values[0]);
         }else {
             Log.e("onSensorChanged", "FAIL");
         }
     }
+
 }

@@ -29,8 +29,22 @@ public class DataContainer {
         System.out.println(getGPS());
     }
 
+    // Gyroscope
+    public static final float[] UNDEFINEDGYROAXISES = {0f,0f};
+    private static List<float[]> gyroAxises = Arrays.asList(UNDEFINEDGYROAXISES);
+    public static void setGyro(float gyroAxisX, float gyroAxisY) {
+        Log.e("Gyro", "Values: "+gyroAxisX+","+gyroAxisY);
+        float[] arr = {gyroAxisX, gyroAxisY};
+        gyroAxises = Arrays.asList(arr);
+    }
+
+    public static List<float[]> getGyro() {
+        Log.e("GMS / Gyro", "Values: " + gyroAxises);
+        return gyroAxises;
+    }
+
     // Acceleration
-    public static final float[] UNDEFINEDAXISES = {0,0};
+    public static final float[] UNDEFINEDAXISES = {0f,0f};
     private static List<float[]> accAxises = Arrays.asList(UNDEFINEDAXISES);
     public static void setAcceleration(float accAxisX, float accAxisY) {
         Log.e("setAcceleration", "Values: "+accAxisX+","+accAxisY);
@@ -42,5 +56,29 @@ public class DataContainer {
         Log.e("GMS / Acceleration", "Values: "+accAxises);
         // -> E/GMS / Acceleration: Values: [[F@21c02a0] ???
         return accAxises;
+    }
+
+    // StepCounter
+    public static final float UNDEFINEDSTEPS = 0;
+    private static float steps = UNDEFINEDSTEPS;
+    public static void setStepCount(float stepCount) {
+       steps = stepCount;
+    }
+
+    public static float getStepCount(){
+        Log.e("GMS / Steps", "Values: "+steps);
+        return steps;
+    }
+
+    // Noise
+    public static int UNDEFINEDNOISE = 0;
+    private static int noise = UNDEFINEDNOISE;
+    public static void setNoise(int stepCount) {
+        noise = stepCount;
+    }
+
+    public static int getNoise(){
+        Log.e("NoiseTracker / Noise", "Values: "+noise);
+        return noise;
     }
 }

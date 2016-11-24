@@ -41,6 +41,8 @@ public class Main extends AppCompatActivity {
     // alustetaan muut muuttujat
     private GPSTracker gps;
     public boolean onoffGPS;
+    public boolean onoffGyro;
+    public boolean onoffAcc;
     public boolean sending = true;
 
     @Override
@@ -83,10 +85,22 @@ public class Main extends AppCompatActivity {
         boolean checked = ((CheckBox) view).isChecked();
         switch(view.getId()) {
             case R.id.checkbox_GPS:
-                if (checked) {
+                if(checked) {
                     onoffGPS = true;
                 } else {
                     onoffGPS = false;
+                }
+            case R.id.checkbox_gyro:
+                if(checked) {
+                    onoffGyro = true;
+                } else {
+                    onoffGyro = false;
+                }
+            case R.id.checkbox_acc:
+                if(checked) {
+                    onoffAcc = true;
+                } else {
+                    onoffAcc = false;
                 }
                 break;
         }
@@ -131,7 +145,11 @@ public class Main extends AppCompatActivity {
             post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
             String latLonStr = DataContainer.getGPS().toString();
+            String gyroStr = DataContainer.getGyro().toString();
             String accStr = DataContainer.getAcc().toString();
+            float stepsStr = DataContainer.getStepCount();
+            int noiseStr = DataContainer.getNoise();
+
 
             try {
                 // luodaan JSON-objekti, eli mitä lähetetään
@@ -144,7 +162,19 @@ public class Main extends AppCompatActivity {
                 } else {
                     Log.e("Main / GPS","off");
                 }
-                jsonobj.put("kiihtyvyys", accStr);
+                if (onoffGyro) {
+                    jsonobj.put("gyro", gyroStr);
+                } else {
+                    Log.e("Main / Gyro","off");
+                }
+                if (onoffGyro) {
+                    jsonobj.put("kiihtyvyys", accStr);
+                } else {
+                    Log.e("Main / kiihtyvyys","off");
+                }
+                jsonobj.put("askeleet", stepsStr);
+                jsonobj.put("noise", noiseStr);
+
                 jsonobj.put("nopeus", "15"); //example value
                 jsonobj.put("viesti", valueMSG);
                 jsonobj.put("timeStamp", getTimeStamp());

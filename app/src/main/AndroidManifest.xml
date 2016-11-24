@@ -21,6 +21,10 @@
         </activity>
         <activity android:name=".GPSTracker">
         </activity>
+        <activity android:name=".GetMotionSensors">
+        </activity>
+        <activity android:name=".NoiseTracker">
+        </activity>
     </application>
 
 </manifest>

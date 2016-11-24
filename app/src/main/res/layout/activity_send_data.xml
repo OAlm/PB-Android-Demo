@@ -25,14 +25,14 @@
     <EditText android:id="@+id/edit_devid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter DEV_ID"
+        android:hint="DEV_ID"
         android:layout_below="@+id/edit_appid"
         android:layout_alignParentStart="true" />
 
     <EditText android:id="@+id/edit_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter message"
+        android:hint="Viesti"
         android:layout_below="@+id/edit_devid"
         android:layout_alignParentStart="true" />
 
@@ -41,6 +41,20 @@
         android:layout_height="wrap_content"
         android:text="@string/GPS"
         android:layout_below="@+id/edit_msg"
+        android:onClick="onCheckboxClicked"/>
+
+    <CheckBox android:id="@+id/checkbox_gyro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gyro"
+        android:layout_below="@+id/checkbox_GPS"
+        android:onClick="onCheckboxClicked"/>
+
+    <CheckBox android:id="@+id/checkbox_acc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kiihtyvyys"
+        android:layout_below="@+id/checkbox_gyro"
         android:onClick="onCheckboxClicked"/>
     <!--
     <CheckBox android:id="@+id/checkbox_voice"
@@ -54,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/checkbox_GPS"
+        android:layout_below="@+id/checkbox_acc"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"
@@ -62,6 +76,7 @@
         android:layout_height="wrap_content"
         android:text="Sammuta"
         android:onClick="close"
-        android:layout_below="@+id/checkbox_GPS"
-        android:layout_toEndOf="@+id/edit_msg" />
+        android:layout_alignBaseline="@+id/button"
+        android:layout_alignBottom="@+id/button"
+        android:layout_toEndOf="@+id/edit_appid" />
 </RelativeLayout>
