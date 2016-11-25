@@ -36,39 +36,39 @@
         android:layout_below="@+id/edit_devid"
         android:layout_alignParentStart="true" />
 
-    <CheckBox android:id="@+id/checkbox_GPS"
+    <CheckBox android:id="@+id/checkbox_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/GPS"
+        android:text="Location"
         android:layout_below="@+id/edit_msg"
         android:onClick="onCheckboxClicked"/>
 
-    <CheckBox android:id="@+id/checkbox_gyro"
+    <CheckBox android:id="@+id/checkbox_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gyro"
-        android:layout_below="@+id/checkbox_GPS"
+        android:text="Audio"
+        android:layout_below="@+id/checkbox_location"
         android:onClick="onCheckboxClicked"/>
 
-    <CheckBox android:id="@+id/checkbox_acc"
+    <CheckBox android:id="@+id/checkbox_mSensors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kiihtyvyys"
-        android:layout_below="@+id/checkbox_gyro"
+        android:text="Motionsensors"
+        android:layout_below="@+id/checkbox_audio"
         android:onClick="onCheckboxClicked"/>
-    <!--
-    <CheckBox android:id="@+id/checkbox_voice"
+
+    <CheckBox android:id="@+id/checkbox_device"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/voice"
-        android:layout_below="@+id/checkbox_GPS"
+        android:text="Device"
+        android:layout_below="@+id/checkbox_mSensors"
         android:onClick="onCheckboxClicked"/>
-    -->
+
     <Button android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/checkbox_acc"
+        android:layout_below="@+id/checkbox_device"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"

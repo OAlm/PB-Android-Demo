@@ -40,16 +40,16 @@ public class Main extends AppCompatActivity {
 
     // alustetaan muut muuttujat
     private GPSTracker gps;
-    public boolean onoffGPS;
-    public boolean onoffGyro;
-    public boolean onoffAcc;
+    public boolean onoffLocation;
+    public boolean onoffAudio;
+    public boolean onoffMSensors;
+    public boolean onoffDevice;
     public boolean sending = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
-
         Log.e("Main / onCreate", "ok");
     }
 
@@ -84,23 +84,29 @@ public class Main extends AppCompatActivity {
     public void onCheckboxClicked(View view) {
         boolean checked = ((CheckBox) view).isChecked();
         switch(view.getId()) {
-            case R.id.checkbox_GPS:
+            case R.id.checkbox_location:
                 if(checked) {
-                    onoffGPS = true;
+                    onoffLocation = true;
                 } else {
-                    onoffGPS = false;
+                    onoffLocation = false;
                 }
-            case R.id.checkbox_gyro:
+            case R.id.checkbox_audio:
                 if(checked) {
-                    onoffGyro = true;
+                    onoffAudio = true;
                 } else {
-                    onoffGyro = false;
+                    onoffAudio = false;
                 }
-            case R.id.checkbox_acc:
+            case R.id.checkbox_mSensors:
                 if(checked) {
-                    onoffAcc = true;
+                    onoffMSensors = true;
                 } else {
-                    onoffAcc = false;
+                    onoffMSensors = false;
+                }
+            case R.id.checkbox_device:
+                if(checked) {
+                    onoffDevice = true;
+                } else {
+                    onoffDevice = false;
                 }
                 break;
         }
@@ -121,12 +127,10 @@ public class Main extends AppCompatActivity {
     // käynnistetään lähetys
     public void sendData(View view) {
         Log.e("Main / sendData", "start");
-
         Log.e("***Init GPSTracker***", "in process");
         Intent intent = new Intent(this, GPSTracker.class);
         startActivity(intent);
         Log.e("********************", "ok");
-
         Toast.makeText(getBaseContext(), "Käynnissä", Toast.LENGTH_SHORT).show();
         sending = true;
         MyThread loop = new MyThread();
@@ -135,13 +139,13 @@ public class Main extends AppCompatActivity {
 
     // https://trinitytuts.com/post-json-data-to-server-in-android/
     // http://stackoverflow.com/questions/31552242/sending-http-post-request-with-android
-    /* Inner class to get response */
+    // Inner class to get response
     class AsyncT extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost post = new HttpPost("http://busdata.metropolia.fi:80/bussidata"); // YOUR_SERVICE_URL
+            HttpPost post = new HttpPost("http://busdata.metropolia.fi:80/bussidata");
             post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
             String latLonStr = DataContainer.getGPS().toString();
@@ -150,34 +154,47 @@ public class Main extends AppCompatActivity {
             float stepsStr = DataContainer.getStepCount();
             int noiseStr = DataContainer.getNoise();
 
-
             try {
-                // luodaan JSON-objekti, eli mitä lähetetään
+                // luodaan JSON-objekti(t), eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
+                JSONObject location = new JSONObject();
+                JSONObject audio = new JSONObject();
+                JSONObject mSensors = new JSONObject();
+                JSONObject device = new JSONObject();
 
-                jsonobj.put("APP_ID", valueAppID);
-                jsonobj.put("DEV_ID", valueDevID);
-                if (onoffGPS) {
-                    jsonobj.put("GPS", latLonStr);
-                } else {
-                    Log.e("Main / GPS","off");
-                }
-                if (onoffGyro) {
-                    jsonobj.put("gyro", gyroStr);
-                } else {
-                    Log.e("Main / Gyro","off");
-                }
-                if (onoffGyro) {
-                    jsonobj.put("kiihtyvyys", accStr);
-                } else {
-                    Log.e("Main / kiihtyvyys","off");
-                }
-                jsonobj.put("askeleet", stepsStr);
-                jsonobj.put("noise", noiseStr);
-
-                jsonobj.put("nopeus", "15"); //example value
-                jsonobj.put("viesti", valueMSG);
+                jsonobj.put("app_id", valueAppID);
+                jsonobj.put("dev_id", valueDevID);
                 jsonobj.put("timeStamp", getTimeStamp());
+                if (onoffLocation) {
+                    location.put("coordinates", latLonStr);
+                    location.put("speed", "15");
+                    location.put("heading", "");
+                    location.put("altitude", "");
+                    jsonobj.put("location", location);
+                } else {
+                    Log.e("Main / location","off");
+                }
+                if (onoffAudio) {
+                    audio.put("maxDecibel", "");
+                    jsonobj.put("audio", audio);
+                } else {
+                    Log.e("Main / audio","off");
+                }
+                if (onoffMSensors) {
+                    mSensors.put("acceleration", accStr);
+                    mSensors.put("stepCounter", stepsStr);
+                    jsonobj.put("motionsensors", mSensors);
+                } else {
+                    Log.e("Main / motionsensors","off");
+                }
+                if (onoffDevice) {
+                    device.put("battery", "");
+                    device.put("msg", valueMSG);
+                    device.put("storage", "");
+                    jsonobj.put("device", device);
+                } else {
+                    Log.e("Main / device","off");
+                }
 
                 StringEntity se = new StringEntity(jsonobj.toString());
                 Log.e("mainToPost", "mainToPost" + jsonobj.toString());
