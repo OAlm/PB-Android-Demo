@@ -43,7 +43,6 @@ public class NoiseTracker extends Activity {
 
     public int getAmplitude() {
         if (mRecorder != null) {
-            //return mRecorder.getMaxAmplitude();
             DataContainer.setNoise(mRecorder.getMaxAmplitude());
         } else {
             return 0;

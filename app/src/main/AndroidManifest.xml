@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".NoiseTracker">
         </activity>
+        <activity android:name=".BatteryTracker">
+        </activity>
     </application>
 
 </manifest>

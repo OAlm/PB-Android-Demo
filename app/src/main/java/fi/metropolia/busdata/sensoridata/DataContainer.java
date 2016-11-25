@@ -30,7 +30,7 @@ public class DataContainer {
     }
 
     // Gyroscope
-    public static final float[] UNDEFINEDGYROAXISES = {0f,0f};
+    public static final float[] UNDEFINEDGYROAXISES = {0.1f,0.1f};
     private static List<float[]> gyroAxises = Arrays.asList(UNDEFINEDGYROAXISES);
     public static void setGyro(float gyroAxisX, float gyroAxisY) {
         Log.e("Gyro", "Values: "+gyroAxisX+","+gyroAxisY);
@@ -44,7 +44,7 @@ public class DataContainer {
     }
 
     // Acceleration
-    public static final float[] UNDEFINEDAXISES = {0f,0f};
+    public static final float[] UNDEFINEDAXISES = {0.1f,0.1f};
     private static List<float[]> accAxises = Arrays.asList(UNDEFINEDAXISES);
     public static void setAcceleration(float accAxisX, float accAxisY) {
         Log.e("setAcceleration", "Values: "+accAxisX+","+accAxisY);
@@ -61,8 +61,7 @@ public class DataContainer {
     // StepCounter
     public static final float UNDEFINEDSTEPS = 0;
     private static float steps = UNDEFINEDSTEPS;
-    public static void setStepCount(float stepCount) {
-       steps = stepCount;
+    public static void setStepCount(float stepCount) {steps = stepCount;
     }
 
     public static float getStepCount(){
@@ -73,12 +72,12 @@ public class DataContainer {
     // Noise
     public static int UNDEFINEDNOISE = 0;
     private static int noise = UNDEFINEDNOISE;
-    public static void setNoise(int stepCount) {
-        noise = stepCount;
+    public static void setNoise(int noiseMeter) {
+        noise = noiseMeter;
     }
 
     public static int getNoise(){
-        Log.e("NoiseTracker / Noise", "Values: "+noise);
+        Log.e("NoiseTracker", "Values: "+noise);
         return noise;
     }
 }

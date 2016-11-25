@@ -57,21 +57,17 @@ public class Main extends AppCompatActivity {
     public class MyThread extends Thread {
         public void run(){
             while(sending) {
-                Log.e("Run OK", "ok");
-                // haetaan App_Id arvo käyttöliittymästä
+                // Haetaan App_Id, Dev_ID ja msg arvot käyttöliittymästä
                 appIdEdit = (EditText) findViewById(R.id.edit_appid);
                 valueAppID = appIdEdit.getText().toString();
-                // haetaan Dev_Id arvo käyttöliittymästä
                 devIdEdit = (EditText) findViewById(R.id.edit_devid);
                 valueDevID = devIdEdit.getText().toString();
-                // haetaan msg arvo käyttöliittymästä
                 msgEdit = (EditText) findViewById(R.id.edit_msg);
                 valueMSG = msgEdit.getText().toString();
                 try {
-                    // suoritetaan AsyncT
+                    // Suoritetaan AsyncT, ja odotetaan sekunti
                     AsyncT asyncT = new AsyncT();
                     asyncT.execute();
-                    // odotetaan sekunti
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -148,6 +144,7 @@ public class Main extends AppCompatActivity {
             HttpPost post = new HttpPost("http://busdata.metropolia.fi:80/bussidata");
             post.addHeader("Content-Type", "application/json; charset=UTF-8");
 
+            // Haetaan muuttujia DataContainer luokasta
             String latLonStr = DataContainer.getGPS().toString();
             String gyroStr = DataContainer.getGyro().toString();
             String accStr = DataContainer.getAcc().toString();
@@ -155,7 +152,7 @@ public class Main extends AppCompatActivity {
             int noiseStr = DataContainer.getNoise();
 
             try {
-                // luodaan JSON-objekti(t), eli mitä lähetetään
+                // Luodaan JSON-objekti(t), eli mitä lähetetään
                 JSONObject jsonobj = new JSONObject();
                 JSONObject location = new JSONObject();
                 JSONObject audio = new JSONObject();
@@ -167,7 +164,7 @@ public class Main extends AppCompatActivity {
                 jsonobj.put("timeStamp", getTimeStamp());
                 if (onoffLocation) {
                     location.put("coordinates", latLonStr);
-                    location.put("speed", "15");
+                    location.put("speed", "15"); //example value
                     location.put("heading", "");
                     location.put("altitude", "");
                     jsonobj.put("location", location);
@@ -175,7 +172,7 @@ public class Main extends AppCompatActivity {
                     Log.e("Main / location","off");
                 }
                 if (onoffAudio) {
-                    audio.put("maxDecibel", "");
+                    audio.put("maxDecibel", noiseStr);
                     jsonobj.put("audio", audio);
                 } else {
                     Log.e("Main / audio","off");
