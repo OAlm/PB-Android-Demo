@@ -2,6 +2,7 @@ package fi.metropolia.busdata.sensoridata;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.media.MediaRecorder;
 import android.media.MediaPlayer;
@@ -16,13 +17,21 @@ public class NoiseTracker extends Activity {
 
     private MediaRecorder mRecorder = null;
 
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("NoiseTracker / onCreate", "pending");
+        setContentView(R.layout.activity_send_data);
+        start();
+        getAmplitude();
+    }
+
     public void start() {
         if (mRecorder == null) {
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mRecorder.setOutputFile("/dev/null");
+            mRecorder.setOutputFile("/dev/null"); // Ei tallenneta tiedostoa
             try {
                 mRecorder.prepare();
             } catch (IOException e) {
@@ -33,6 +42,7 @@ public class NoiseTracker extends Activity {
         }
     }
 
+    // Voidaanko kutsua Main luokassa kun painetaan sammuta-nappia?
     public void stop() {
         if (mRecorder != null) {
             mRecorder.stop();

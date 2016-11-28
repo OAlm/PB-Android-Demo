@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sensoridata</string>
+    <string name="app_name">Purple Box</string>
     <string name="edit_id">Enter ID</string>
     <string name="GPS">GPS</string>
     <string name="voice">Voice</string>

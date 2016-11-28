@@ -50,7 +50,7 @@ public class Main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
-        Log.e("Main / onCreate", "ok");
+        // Log.e("Main / onCreate", "ok");
     }
 
     // Thread suoritetaan Käynnistä-nappia painettaessa
@@ -122,7 +122,6 @@ public class Main extends AppCompatActivity {
 
     // käynnistetään lähetys
     public void sendData(View view) {
-        Log.e("Main / sendData", "start");
         Log.e("***Init GPSTracker***", "in process");
         Intent intent = new Intent(this, GPSTracker.class);
         startActivity(intent);
@@ -185,7 +184,7 @@ public class Main extends AppCompatActivity {
                     Log.e("Main / motionsensors","off");
                 }
                 if (onoffDevice) {
-                    device.put("battery", "");
+                    device.put("battery", "100"); //example value
                     device.put("msg", valueMSG);
                     device.put("storage", "");
                     jsonobj.put("device", device);

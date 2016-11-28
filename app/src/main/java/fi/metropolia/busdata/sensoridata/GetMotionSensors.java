@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.Log;
 
 /**
@@ -14,18 +15,28 @@ import android.util.Log;
 
 public class GetMotionSensors extends Activity implements SensorEventListener {
 
-    public enum SensorType {STEPCOUNTER, GYRO, ACCELERATOR}
-
     // https://developer.android.com/guide/topics/sensors/sensors_overview.html
 
+    public enum SensorType {STEPCOUNTER, GYRO, ACCELERATOR}
     // GYRO variables
     private float timestamp;
 
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("GPSTracker / onCreate", "pending");
+        setContentView(R.layout.activity_send_data);
+    } //?
+
     public Sensor newSensor(SensorType sensor) {
         Log.e("MotionSenrorit", "HALOO???");
-
         SensorManager mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         if(sensor == SensorType.GYRO) {
+            if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
+                Log.e("Success!", "There's a GYROSCOPE.");
+            }
+            else {
+                Log.e("Failure!", "No GYROSCOPE.");
+            }
             return mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         } else if(sensor == SensorType.ACCELERATOR) {
             return mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -35,7 +46,6 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
             // FAIL
             return mSensorManager.getDefaultSensor(0);
         }
-
     }
 
     // https://developer.android.com/reference/android/hardware/SensorManager.html
@@ -63,11 +73,12 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
         super.onResume();
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
     }
-
+*/
+/*
     @Override
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
     }
-*/
+    */
 }

@@ -24,6 +24,7 @@ public class DataContainer {
         return gpsCoordinates;
     }
 
+    // Mitä tekee?
     public static void main(String[]args){
         setGPS(0.1,0.1);
         System.out.println(getGPS());
