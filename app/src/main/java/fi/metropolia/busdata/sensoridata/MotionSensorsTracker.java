@@ -13,31 +13,35 @@ import android.util.Log;
  * Created by jasu on 21/11/2016.
  */
 
-public class GetMotionSensors extends Activity implements SensorEventListener {
+public class MotionSensorsTracker extends Activity implements SensorEventListener {
+
+    private SensorManager mSensorManager;
+    private Sensor mGyroscope;
 
     // https://developer.android.com/guide/topics/sensors/sensors_overview.html
 
     public enum SensorType {STEPCOUNTER, GYRO, ACCELERATOR}
-    // GYRO variables
-    private float timestamp;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("GPSTracker / onCreate", "pending");
         setContentView(R.layout.activity_send_data);
-    } //?
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+    }
 
     public Sensor newSensor(SensorType sensor) {
         Log.e("MotionSenrorit", "HALOO???");
-        SensorManager mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        // mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         if(sensor == SensorType.GYRO) {
+            // return mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
                 Log.e("Success!", "There's a GYROSCOPE.");
             }
             else {
                 Log.e("Failure!", "No GYROSCOPE.");
             }
-            return mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            return mGyroscope;
         } else if(sensor == SensorType.ACCELERATOR) {
             return mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         } else if(sensor == SensorType.STEPCOUNTER) {
@@ -56,9 +60,7 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
     @Override
     public final void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            if (timestamp != 0) {
-                DataContainer.setGyro(event.values[0], event.values[1]);
-            }
+            DataContainer.setGyro(event.values[0], event.values[1]);
         } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             DataContainer.setAcceleration(event.values[0], event.values[1]);
         } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -67,18 +69,16 @@ public class GetMotionSensors extends Activity implements SensorEventListener {
             Log.e("onSensorChanged", "FAIL");
         }
     }
-/*
+
     @Override
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
     }
-*/
-/*
+
     @Override
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
     }
-    */
 }

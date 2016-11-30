@@ -1,11 +1,6 @@
 package fi.metropolia.busdata.sensoridata;
 
 import android.content.Intent;
-import android.icu.util.GregorianCalendar;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.location.LocationManager;
-import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -149,6 +144,7 @@ public class Main extends AppCompatActivity {
             String accStr = DataContainer.getAcc().toString();
             float stepsStr = DataContainer.getStepCount();
             int noiseStr = DataContainer.getNoise();
+            int batteryStr = DataContainer.getBatLevel();
 
             try {
                 // Luodaan JSON-objekti(t), eli mitä lähetetään
@@ -164,8 +160,8 @@ public class Main extends AppCompatActivity {
                 if (onoffLocation) {
                     location.put("coordinates", latLonStr);
                     location.put("speed", "15"); //example value
-                    location.put("heading", "");
-                    location.put("altitude", "");
+                    location.put("heading", "0"); //example value
+                    location.put("altitude", "0"); //example value
                     jsonobj.put("location", location);
                 } else {
                     Log.e("Main / location","off");
@@ -184,9 +180,9 @@ public class Main extends AppCompatActivity {
                     Log.e("Main / motionsensors","off");
                 }
                 if (onoffDevice) {
-                    device.put("battery", "100"); //example value
+                    device.put("battery", batteryStr);
                     device.put("msg", valueMSG);
-                    device.put("storage", "");
+                    device.put("storage", "32/64"); //example value
                     jsonobj.put("device", device);
                 } else {
                     Log.e("Main / device","off");

@@ -49,7 +49,6 @@ public class GPSTracker extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.e("setGPS", "Lat: " + location.getLatitude() + "Long: " + location.getLongitude());
         DataContainer.setGPS(location.getLatitude(), location.getLongitude());
     }
 

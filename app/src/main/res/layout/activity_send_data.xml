@@ -39,7 +39,7 @@
     <CheckBox android:id="@+id/checkbox_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location"
+        android:text="Sijainti"
         android:layout_below="@+id/edit_msg"
         android:onClick="onCheckboxClicked"/>
 
@@ -53,14 +53,14 @@
     <CheckBox android:id="@+id/checkbox_mSensors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Motionsensors"
+        android:text="Liikesensorit"
         android:layout_below="@+id/checkbox_audio"
         android:onClick="onCheckboxClicked"/>
 
     <CheckBox android:id="@+id/checkbox_device"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Device"
+        android:text="Laite"
         android:layout_below="@+id/checkbox_mSensors"
         android:onClick="onCheckboxClicked"/>
 

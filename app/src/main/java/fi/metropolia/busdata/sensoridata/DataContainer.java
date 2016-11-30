@@ -31,7 +31,7 @@ public class DataContainer {
     }
 
     // Gyroscope
-    public static final float[] UNDEFINEDGYROAXISES = {0.1f,0.1f};
+    public static final float[] UNDEFINEDGYROAXISES = {1f,1f};
     private static List<float[]> gyroAxises = Arrays.asList(UNDEFINEDGYROAXISES);
     public static void setGyro(float gyroAxisX, float gyroAxisY) {
         Log.e("Gyro", "Values: "+gyroAxisX+","+gyroAxisY);
@@ -44,8 +44,8 @@ public class DataContainer {
         return gyroAxises;
     }
 
-    // Acceleration
-    public static final float[] UNDEFINEDAXISES = {0.1f,0.1f};
+    // Linear acceleration
+    public static final float[] UNDEFINEDAXISES = {1f,1f};
     private static List<float[]> accAxises = Arrays.asList(UNDEFINEDAXISES);
     public static void setAcceleration(float accAxisX, float accAxisY) {
         Log.e("setAcceleration", "Values: "+accAxisX+","+accAxisY);
@@ -59,18 +59,18 @@ public class DataContainer {
         return accAxises;
     }
 
-    // StepCounter
+    // Step Counter
     public static final float UNDEFINEDSTEPS = 0;
     private static float steps = UNDEFINEDSTEPS;
     public static void setStepCount(float stepCount) {steps = stepCount;
     }
 
     public static float getStepCount(){
-        Log.e("GMS / Steps", "Values: "+steps);
+        Log.e("GMS / Steps", "Value: "+steps);
         return steps;
     }
 
-    // Noise
+    // Noise meter
     public static int UNDEFINEDNOISE = 0;
     private static int noise = UNDEFINEDNOISE;
     public static void setNoise(int noiseMeter) {
@@ -78,7 +78,19 @@ public class DataContainer {
     }
 
     public static int getNoise(){
-        Log.e("NoiseTracker", "Values: "+noise);
+        Log.e("NoiseTracker", "Value: "+noise);
         return noise;
+    }
+
+    // Battery level
+    public static int UNDEFINEDBATLEVEL = 100;
+    private static int battery = UNDEFINEDBATLEVEL;
+    public static void setBatLevel(int betLevel) {
+        battery = betLevel;
+    }
+
+    public static int getBatLevel(){
+        Log.e("BatteryTracker", "Level: "+battery);
+        return battery;
     }
 }
