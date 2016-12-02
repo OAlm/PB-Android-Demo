@@ -17,23 +17,29 @@ public class MotionSensorsTracker extends Activity implements SensorEventListene
 
     private SensorManager mSensorManager;
     private Sensor mGyroscope;
-
-    // https://developer.android.com/guide/topics/sensors/sensors_overview.html
+    private Sensor mAcceleration;
+    private Sensor mStepCounter;
 
     public enum SensorType {STEPCOUNTER, GYRO, ACCELERATOR}
 
+    // https://developer.android.com/guide/topics/sensors/sensors_overview.html
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_data);
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        Log.e("MotionSenrorit", "HALOO???");
     }
 
+    /*
     public Sensor newSensor(SensorType sensor) {
         Log.e("MotionSenrorit", "HALOO???");
-        // mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
         if(sensor == SensorType.GYRO) {
-            // return mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            return mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
                 Log.e("Success!", "There's a GYROSCOPE.");
@@ -51,6 +57,7 @@ public class MotionSensorsTracker extends Activity implements SensorEventListene
             return mSensorManager.getDefaultSensor(0);
         }
     }
+    */
 
     // https://developer.android.com/reference/android/hardware/SensorManager.html
     @Override
@@ -74,6 +81,8 @@ public class MotionSensorsTracker extends Activity implements SensorEventListene
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mAcceleration, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override

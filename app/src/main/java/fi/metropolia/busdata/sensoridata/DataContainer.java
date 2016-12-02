@@ -83,10 +83,10 @@ public class DataContainer {
     }
 
     // Battery level
-    public static int UNDEFINEDBATLEVEL = 100;
+    public static int UNDEFINEDBATLEVEL = 1;
     private static int battery = UNDEFINEDBATLEVEL;
-    public static void setBatLevel(int betLevel) {
-        battery = betLevel;
+    public static void setBatLevel(int batLevel) {
+        battery = batLevel;
     }
 
     public static int getBatLevel(){
