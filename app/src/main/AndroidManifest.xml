@@ -5,6 +5,12 @@
     <!-- GPS and internet permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Permissions for audio-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Permissions for battery-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
 
     <application
         android:allowBackup="true"
@@ -15,11 +21,19 @@
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".GPSTracker">
+        </activity>
+        <activity android:name=".MotionSensorsTracker">
+        </activity>
+        <activity android:name=".NoiseTracker">
+        </activity>
+        <activity android:name=".BatteryTracker">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
+            </intent-filter>
         </activity>
     </application>
 

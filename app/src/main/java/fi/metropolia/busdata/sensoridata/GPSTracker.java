@@ -44,14 +44,11 @@ public class GPSTracker extends Activity implements LocationListener {
         Log.e("GPS ok", "ok");
         // dummy values to test that the init was ok
         DataContainer.setGPS(-10.0, -10.0);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        valueGPS = "Lat: " + location.getLatitude() + "Long: " + location.getLongitude();
-        Log.e("setGPS", valueGPS);
-        //Toast.makeText(getBaseContext(), valueGPS, Toast.LENGTH_LONG).show();
         DataContainer.setGPS(location.getLatitude(), location.getLongitude());
     }
 

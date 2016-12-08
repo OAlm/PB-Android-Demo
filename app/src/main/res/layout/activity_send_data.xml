@@ -25,36 +25,50 @@
     <EditText android:id="@+id/edit_devid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter DEV_ID"
+        android:hint="DEV_ID"
         android:layout_below="@+id/edit_appid"
         android:layout_alignParentStart="true" />
 
     <EditText android:id="@+id/edit_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter message"
+        android:hint="Viesti"
         android:layout_below="@+id/edit_devid"
         android:layout_alignParentStart="true" />
-    <!--
-    <CheckBox android:id="@+id/checkbox_GPS"
+
+    <CheckBox android:id="@+id/checkbox_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/GPS"
-        android:layout_below="@+id/edit_id"
+        android:text="Sijainti"
+        android:layout_below="@+id/edit_msg"
         android:onClick="onCheckboxClicked"/>
 
-    <CheckBox android:id="@+id/checkbox_voice"
+    <CheckBox android:id="@+id/checkbox_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/voice"
-        android:layout_below="@+id/checkbox_GPS"
+        android:text="Audio"
+        android:layout_below="@+id/checkbox_location"
         android:onClick="onCheckboxClicked"/>
-    -->
+
+    <CheckBox android:id="@+id/checkbox_mSensors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Liikesensorit"
+        android:layout_below="@+id/checkbox_audio"
+        android:onClick="onCheckboxClicked"/>
+
+    <CheckBox android:id="@+id/checkbox_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Laite"
+        android:layout_below="@+id/checkbox_mSensors"
+        android:onClick="onCheckboxClicked"/>
+
     <Button android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Käynnistä"
-        android:layout_below="@+id/edit_msg"
+        android:layout_below="@+id/checkbox_device"
         android:onClick="sendData" />
 
     <Button android:id="@+id/close"
@@ -62,6 +76,7 @@
         android:layout_height="wrap_content"
         android:text="Sammuta"
         android:onClick="close"
-        android:layout_below="@+id/edit_msg"
-        android:layout_toEndOf="@+id/edit_msg" />
+        android:layout_alignBaseline="@+id/button"
+        android:layout_alignBottom="@+id/button"
+        android:layout_toEndOf="@+id/edit_appid" />
 </RelativeLayout>
