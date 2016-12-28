@@ -1,57 +1,59 @@
-package fi.metropolia.busdata.sensoridata;
+package fi.metropolia.busdata.sensoridata.service;
 
 import android.Manifest;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
 import android.util.Log;
+import android.widget.Toast;
 
-/**
- * Created by jasu on 14/11/2016.
+import fi.metropolia.busdata.sensoridata.DataContainer;
+import fi.metropolia.busdata.sensoridata.R;
+
+/**§
+ * Created by alm on 12/28/16.
  */
 
-// http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
-// http://techlovejump.com/android-gps-location-manager-tutorial/
+public class GPSService extends Service implements LocationListener {
 
-public class GPSTracker extends Activity implements LocationListener {
-
-    public String valueGPS;
     private LocationManager locationManager;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_data);
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-        Log.e("GPSTracker / onCreate", "pending");
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        // Let it continue running until it is stopped.
+        Log.e("GPSService / start", "pending");
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         // Android studio halusi laittaa permissio chekin
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.e("GPSTracker", "permission failed for accessing the location!");
-            return;
+            return START_STICKY;
         }
         Log.e("GPS ok", "on create");
         // dummy values to test that the init was ok
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
 
-    }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.e("GPSTracker","location changed");
-        DataContainer.setLocation(location);
+        return START_STICKY;
+
     }
 
     @Override
@@ -68,6 +70,7 @@ public class GPSTracker extends Activity implements LocationListener {
         Toast.makeText(getBaseContext(), "Gps is turned on! ", Toast.LENGTH_SHORT).show();
     }
 
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         Log.e("GPSTracker","status changed");
@@ -75,23 +78,16 @@ public class GPSTracker extends Activity implements LocationListener {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        Log.e("GPSTracker","permissions");
+    public void onLocationChanged(Location location) {
+        Log.e("GPSTracker","location changed");
+        DataContainer.setLocation(location);
+    }
 
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("GPS permission","Permission granted!");
-                    Toast.makeText(getBaseContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
-                    Log.e("GPS permission","enabled printed!");
-                } else {
-                    Log.e("GPS permission","Permission not granted!");
-                    Toast.makeText(getBaseContext(), "GPS disabled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
+    @Override
+    public void onDestroy() {
+        Log.e("GPS","ended!");
+        super.onDestroy();
 
     }
+
 }

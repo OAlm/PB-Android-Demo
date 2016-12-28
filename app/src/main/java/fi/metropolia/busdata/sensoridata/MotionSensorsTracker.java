@@ -31,7 +31,7 @@ public class MotionSensorsTracker extends Activity implements SensorEventListene
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         mStepCounter = mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        Log.e("MotionSenrorit", "HALOO???");
+        Log.e("Motion sensors", "onCreate");
     }
 
     /*
@@ -62,12 +62,25 @@ public class MotionSensorsTracker extends Activity implements SensorEventListene
     // https://developer.android.com/reference/android/hardware/SensorManager.html
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
+        Log.e("Motion sensors", "accuracy changed");
     }
+
+    private static final float NS2S = 1.0f / 1000000000.0f;
+    private float timestamp = 0; // TODO, move
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            DataContainer.setGyro(event.values[0], event.values[1]);
+            if (timestamp != 0) { // TODO check
+                final float dT = (event.timestamp - timestamp) * NS2S;
+                float axisX = event.values[0];
+                float axisY = event.values[1];
+                float axisZ = event.values[2];
+
+                GyroData g = new GyroData(dT, axisX, axisY, axisZ);
+                DataContainer.setGyro(g);
+            }
+            timestamp = event.timestamp;
         } else if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             DataContainer.setAcceleration(event.values[0], event.values[1]);
         } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {

@@ -35,6 +35,7 @@
                 <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
             </intent-filter>
         </activity>
+        <service android:name=".service.GPSService" />
     </application>
 
 </manifest>

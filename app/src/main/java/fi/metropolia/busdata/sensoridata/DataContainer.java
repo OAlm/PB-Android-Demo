@@ -2,6 +2,8 @@ package fi.metropolia.busdata.sensoridata;
 
 import java.util.Arrays;
 import java.util.List;
+
+import android.location.Location;
 import android.util.Log;
 
 /**
@@ -10,39 +12,57 @@ import android.util.Log;
 
 public class DataContainer {
 
-    // GPS: format <lat, lon>
-    public static final Double[] UNDEFINEDCOORDINATES = {-1.0,-1.0};
-    private static List<Double> gpsCoordinates = Arrays.asList(UNDEFINEDCOORDINATES);
-    public static void setGPS(Double lat, Double lon) {
-        Log.e("setGPS", "Values: "+lat+","+lon);
-        Double[] arr = {lat, lon};
-        gpsCoordinates = Arrays.asList(arr);
+    //  --------
+    //  LOCATION
+    //  --------
+    private static Location location = null;
+    private static GyroData gyro = null;
+    private static Float stepCount = null;
+
+    public static boolean locationDefined() {
+        return location != null;
     }
 
-    public static List<Double> getGPS(){
-        Log.e("GPSTracker", "Values: "+gpsCoordinates);
-        return gpsCoordinates;
+    public static void setLocation(Location loc) {
+        Log.e("DC.setLocation", loc.getLatitude()+","+loc.getLongitude());
+        location = loc;
+    }
+    public static Location getLocation() {
+        return location;
     }
 
-    // Mitä tekee?
-    public static void main(String[]args){
-        setGPS(0.1,0.1);
-        System.out.println(getGPS());
+    //  ---------
+    //  GYROSCOPE
+    //  ---------
+    public static boolean gyroDefined() {
+        return gyro != null;
     }
 
-    // Gyroscope
-    public static final float[] UNDEFINEDGYROAXISES = {1f,1f};
-    private static List<float[]> gyroAxises = Arrays.asList(UNDEFINEDGYROAXISES);
-    public static void setGyro(float gyroAxisX, float gyroAxisY) {
-        Log.e("Gyro", "Values: "+gyroAxisX+","+gyroAxisY);
-        float[] arr = {gyroAxisX, gyroAxisY};
-        gyroAxises = Arrays.asList(arr);
+    public static void setGyro(GyroData g) {
+        Log.e("Gyro", g.toString());
+        gyro = g;
     }
 
-    public static List<float[]> getGyro() {
-        Log.e("GMS / Gyro", "Values: " + gyroAxises);
-        return gyroAxises;
+    public static GyroData getGyro() {
+        return gyro;
     }
+
+    // ---------
+    // STEPCOUNT
+    // ---------
+    public static boolean stepCountDefined() {
+        return stepCount != null;
+    }
+
+    public static void setStepCount(float stepCount) {
+        stepCount = stepCount;
+    }
+
+    public static float getStepCount(){
+        Log.e("GMS / Steps", "Value: "+stepCount);
+        return stepCount;
+    }
+
 
     // Linear acceleration
     public static final float[] UNDEFINEDAXISES = {1f,1f};
@@ -58,18 +78,6 @@ public class DataContainer {
         // -> E/GMS / Acceleration: Values: [[F@21c02a0] ???
         return accAxises;
     }
-
-    // Step Counter
-    public static final float UNDEFINEDSTEPS = 0;
-    private static float steps = UNDEFINEDSTEPS;
-    public static void setStepCount(float stepCount) {steps = stepCount;
-    }
-
-    public static float getStepCount(){
-        Log.e("GMS / Steps", "Value: "+steps);
-        return steps;
-    }
-
     // Noise meter
     public static int UNDEFINEDNOISE = 0;
     private static int noise = UNDEFINEDNOISE;
