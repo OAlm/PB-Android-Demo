@@ -1,8 +1,14 @@
 package fi.metropolia.busdata.sensoridata;
 
+import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,10 +42,6 @@ public class Main extends AppCompatActivity {
     EditText msgEdit;
     public String valueMSG;
 
-    // alustetaan muut muuttujat
-    //private GPSTracker gps;
-
-    private Intent gpsTracker;
     private Intent motionTracker;
 
     public boolean sending = true;
@@ -108,14 +110,12 @@ public class Main extends AppCompatActivity {
             Log.e("Checkbox location", "" + status);
             if(this.locationEnabled) {
                 startGPS();
+                Log.e("Main", "startGPS called");
             } else {
                 stopGPS();
+                Log.e("Main", "stopGPS called");
             }
-            //gpsTracker = new Intent(this, GPSTracker.class);
-            //gpsTracker = new Intent(this, GPSTracker.class);
-            //startActivity(gpsTracker);
 
-            Log.e("gpstracker init ok!", "ok");
 
         } else if (checkBox == R.id.checkbox_mSensors) {
             this.motionEnabled = status;
@@ -127,17 +127,38 @@ public class Main extends AppCompatActivity {
             Log.e("motiontracker init ok!", "ok");
 
         }
-        Log.e("Main","CheckBox leave");
+    }
+
+    private LocationManager locationManager;
+    private void requireGPSPermissions() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("Main/GPS", "permission failed for accessing the location!");
+            return;
+        }
+
+        Intent gpsServiceIntent = new Intent(getBaseContext(), GPSService.class);
+        PendingIntent gpsServicePI = PendingIntent.getService(this, 1, gpsServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //FIXME: check parameters 1 and 1000f
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,1000f, gpsServicePI);
+
+        // Olli 31.12. disabled this for testing, now both in service and in main
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,1, gpsServicePI);
+        startService(new Intent(getBaseContext(), GPSService.class));
     }
 
     // GPS Service
     public void startGPS() {
-        startService(new Intent(getBaseContext(), GPSService.class));
+        requireGPSPermissions();
     }
 
     // Method to stop the service
     public void stopGPS() {
         stopService(new Intent(getBaseContext(), GPSService.class));
+        Toast.makeText(getBaseContext(), "GPS stopped", Toast.LENGTH_SHORT).show();
     }
 
     // luodaan timeStamp
@@ -162,6 +183,28 @@ public class Main extends AppCompatActivity {
         MyThread loop = new MyThread();
         loop.start();
     }
+
+    // GPS permission check (TESTING 28.12.2016)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.e("Main / GPS","permissions");
+
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("Main/GPS permission","Permission granted!");
+                    Toast.makeText(getBaseContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.e("Main/GPS permission","Permission not granted!");
+                    Toast.makeText(getBaseContext(), "GPS not granted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+    }
+
 
     // https://trinitytuts.com/post-json-data-to-server-in-android/
     // http://stackoverflow.com/questions/31552242/sending-http-post-request-with-android
@@ -198,7 +241,7 @@ public class Main extends AppCompatActivity {
                     location.put("altitude", locationData.getAltitude()); //example value
                     messageContainer.put("location", location);
                 } else {
-                    System.out.println("loc: "+ DataContainer.locationDefined());
+                    System.out.println("location defined in datacontainer: "+ DataContainer.locationDefined());
                     Log.e("Main / location","off");
                 }
                 if (audioEnabled) {
@@ -247,4 +290,6 @@ public class Main extends AppCompatActivity {
             return null;
         }
     }
+
+
 }
